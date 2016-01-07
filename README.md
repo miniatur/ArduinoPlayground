@@ -1,2 +1,2 @@
 # ArduinoPlayground
-Just for hack and / - Be aware of spagetty code
+Just for hack and / - Be aware of spagetti code
