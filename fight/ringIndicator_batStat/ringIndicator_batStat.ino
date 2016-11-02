@@ -1,67 +1,89 @@
+/*TODO 
+	Show Ring aprox of bat value on boot
+	standardize voltage devider
+	autoestimate cellcount
+	init procedure and stores vaues to eprom
+*/
+//Includes
 #include <Adafruit_NeoPixel.h>
 
+
+//Defines
 #define PIN 13
 #define LOWV 830
 #define MEDV 801
+#define HI
+
+//Init Neo Pixel
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(16, PIN, NEO_GRB + NEO_KHZ800);
 
+//Global Vars Init
+	double y;
+	int batMode;
+	int cellcountd
 
-double y;
-int batMode;
-
+	
 void setup() {
-  strip.begin();
-  strip.show();
+	//Start Neo Pixel
+	strip.begin();
+	strip.show();
 
-//debugsetup
-Serial.begin(9600);}
+	//debug Serial
+	Serial.begin(9600);}
 
+	
+	
+//begin program
 void loop() {
 
-//int estimate BatV
-y=analogRead(0);
+//int BatV with RAW read - CheckBat normalizes all following readings 
+	y=analogRead(0);
+//TODO 1
+
 //mainLoop
 while(1){
+
 batMode=checkBatV();
 colDir();
 
 }}
 
-void scanCW(){
-  for(int x=0; x<16; x++){
-    strip.setPixelColor((15+x)%16,0,0,0);
-    strip.setPixelColor((16+x)%16,  0,0,50);
-    strip.show();
-    delay(100);
-   }
-  
-  }
+//pixel ring animations
+		void scanCW(){
+		  for(int x=0; x<16; x++){
+			strip.setPixelColor((15+x)%16,0,0,0);
+			strip.setPixelColor((16+x)%16,  0,0,50);
+			strip.show();
+			delay(100);
+		   }
+		  
+		  }
 
-void scanCWCCW(){
-  for(int x=0; x<16; x++){
-    strip.setPixelColor((15+x)%16,0,0,0);
-    strip.setPixelColor((16+x)%16,  0,0,50);
-    strip.setPixelColor((15-x)%16,0,0,50);
-    strip.setPixelColor((16-x)%16,  0,0,0);
-    strip.show();
-    delay(100);
-   }
-  
-  }
+		void scanCWCCW(){
+		  for(int x=0; x<16; x++){
+			strip.setPixelColor((15+x)%16,0,0,0);
+			strip.setPixelColor((16+x)%16,  0,0,50);
+			strip.setPixelColor((15-x)%16,0,0,50);
+			strip.setPixelColor((16-x)%16,  0,0,0);
+			strip.show();
+			delay(100);
+		   }
+		  
+		  }
 
-void scanhalfCWCCW(){
-  strip.setPixelColor(7,0,0,0);
-  strip.setPixelColor(8,0,0,0);
-  for(int x=0; x<8; x++){
-    strip.setPixelColor((15+x)%16,0,0,0);
-    strip.setPixelColor((16+x)%16,  0,0,50);
-    strip.setPixelColor((15-x)%16,0,0,50);
-    strip.setPixelColor((16-x)%16,  0,0,0);
-    strip.show();
-    delay(100);
-   }
-  
-  }
+		void scanhalfCWCCW(){
+		  strip.setPixelColor(7,0,0,0);
+		  strip.setPixelColor(8,0,0,0);
+		  for(int x=0; x<8; x++){
+			strip.setPixelColor((15+x)%16,0,0,0);
+			strip.setPixelColor((16+x)%16,  0,0,50);
+			strip.setPixelColor((15-x)%16,0,0,50);
+			strip.setPixelColor((16-x)%16,  0,0,0);
+			strip.show();
+			delay(100);
+		   }
+		  
+		  }
 
 void colDir(){
     
@@ -145,10 +167,16 @@ void colDir(){
 
 //void colInit(){;}
 
-int checkBatV(){return checkBatV(0);}
+int checkBatV(){return checkBatV(0);
+	//redirect to checkBatV(int cellcount) so it can get called with standart cellcount or autoEstimate
+	//todo autoestimate (change average weight, standartize voltage devider)
+	}
+//cellcount not in use
 int checkBatV(int cellcount){
+  //average out raw voltage devider input pin
   y=0.01*analogRead(0)+0.99*y;
   Serial.println(y);
+  
   //Check if Bat LOW
   if(y<LOWV){return 0;}
   if(y>LOWV){return 1;}
