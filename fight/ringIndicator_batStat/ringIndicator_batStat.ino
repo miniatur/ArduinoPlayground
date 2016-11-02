@@ -20,7 +20,7 @@ void loop() {
 
 //int estimate BatV
 y=analogRead(0);
-  //mainLoop
+//mainLoop
 while(1){
 batMode=checkBatV();
 colDir();
@@ -103,7 +103,7 @@ void colDir(){
    
   }}
 
-//BAT LOW MODE
+//BAT LOW Mode Animation
   if(batMode==0){
   for(int x=0; x<8;x++){
     if(x<=0){
@@ -134,6 +134,7 @@ void colDir(){
     strip.setPixelColor(15 , 50,50,50);
     strip.setPixelColor(7 , 100,0,0);
     strip.setPixelColor(8 , 100,0,0);
+    //Update Pixels 
     strip.show();
     delay(30);
    
@@ -146,7 +147,7 @@ void colDir(){
 
 int checkBatV(){return checkBatV(0);}
 int checkBatV(int cellcount){
-  y=0.0005*analogRead(0)+0.9995*y;
+  y=0.01*analogRead(0)+0.99*y;
   Serial.println(y);
   //Check if Bat LOW
   if(y<LOWV){return 0;}
